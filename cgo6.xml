@@ -1,0 +1,254 @@
+<graph id="Graph">
+  <version>1.0</version>
+  <node id="Read">
+    <operator>Read</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${read}</file>
+    </parameters>
+  </node>
+  <node id="Calibration">
+    <operator>Calibration</operator>
+    <sources>
+      <sourceProduct refid="Read"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <sourceBands/>
+      <auxFile>Product Auxiliary File</auxFile>
+      <externalAuxFile/>
+      <outputImageInComplex>false</outputImageInComplex>
+      <outputImageScaleInDb>false</outputImageScaleInDb>
+      <createGammaBand>false</createGammaBand>
+      <createBetaBand>true</createBetaBand>
+      <selectedPolarisations/>
+      <outputSigmaBand>false</outputSigmaBand>
+      <outputGammaBand>false</outputGammaBand>
+      <outputBetaBand>true</outputBetaBand>
+    </parameters>
+  </node>
+  <node id="Speckle-Filter">
+    <operator>Speckle-Filter</operator>
+    <sources>
+      <sourceProduct refid="Calibration"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <sourceBands/>
+      <filter>Refined Lee</filter>
+      <filterSizeX>3</filterSizeX>
+      <filterSizeY>3</filterSizeY>
+      <dampingFactor>2</dampingFactor>
+      <estimateENL>true</estimateENL>
+      <enl>1.0</enl>
+      <numLooksStr>1</numLooksStr>
+      <windowSize>7x7</windowSize>
+      <targetWindowSizeStr>3x3</targetWindowSizeStr>
+      <sigmaStr>0.9</sigmaStr>
+      <anSize>50</anSize>
+    </parameters>
+  </node>
+  <node id="Terrain-Flattening">
+    <operator>Terrain-Flattening</operator>
+    <sources>
+      <sourceProduct refid="Speckle-Filter"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <sourceBands/>
+      <demName>SRTM 1Sec HGT</demName>
+      <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <outputSimulatedImage>false</outputSimulatedImage>
+      <reGridMethod>false</reGridMethod>
+    </parameters>
+  </node>
+  <node id="Terrain-Correction">
+    <operator>Terrain-Correction</operator>
+    <sources>
+      <sourceProduct refid="Terrain-Flattening"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <sourceBands/>
+      <demName>SRTM 1Sec HGT</demName>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <externalDEMApplyEGM>true</externalDEMApplyEGM>
+      <demResamplingMethod>BICUBIC_INTERPOLATION</demResamplingMethod>
+      <imgResamplingMethod>BILINEAR_INTERPOLATION</imgResamplingMethod>
+      <pixelSpacingInMeter>10.0</pixelSpacingInMeter>
+      <pixelSpacingInDegree>8.983152841195215E-5</pixelSpacingInDegree>
+      <mapProjection>GEOGCS[&quot;WGS84(DD)&quot;, &#xd;
+  DATUM[&quot;WGS84&quot;, &#xd;
+    SPHEROID[&quot;WGS84&quot;, 6378137.0, 298.257223563]], &#xd;
+  PRIMEM[&quot;Greenwich&quot;, 0.0], &#xd;
+  UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+  AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+  AXIS[&quot;Geodetic latitude&quot;, NORTH]]</mapProjection>
+      <!--mapProjection>PROJCS[&quot;WGS 84 / Pseudo-Mercator&quot;, &#xd;
+  GEOGCS[&quot;WGS 84&quot;, &#xd;
+    DATUM[&quot;World Geodetic System 1984&quot;, &#xd;
+      SPHEROID[&quot;WGS 84&quot;, 6378137.0, 298.257223563, AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]], &#xd;
+      AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]], &#xd;
+    PRIMEM[&quot;Greenwich&quot;, 0.0, AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]], &#xd;
+    UNIT[&quot;degree&quot;, 0.017453292519943295], &#xd;
+    AXIS[&quot;Geodetic longitude&quot;, EAST], &#xd;
+    AXIS[&quot;Geodetic latitude&quot;, NORTH], &#xd;
+    AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]], &#xd;
+  PROJECTION[&quot;Popular Visualisation Pseudo Mercator&quot;], &#xd;
+  PARAMETER[&quot;semi_minor&quot;, 6378137.0], &#xd;
+  PARAMETER[&quot;latitude_of_origin&quot;, 0.0], &#xd;
+  PARAMETER[&quot;central_meridian&quot;, 0.0], &#xd;
+  PARAMETER[&quot;scale_factor&quot;, 1.0], &#xd;
+  PARAMETER[&quot;false_easting&quot;, 0.0], &#xd;
+  PARAMETER[&quot;false_northing&quot;, 0.0], &#xd;
+  UNIT[&quot;m&quot;, 1.0], &#xd;
+  AXIS[&quot;Easting&quot;, EAST], &#xd;
+  AXIS[&quot;Northing&quot;, NORTH], &#xd;
+  AUTHORITY[&quot;EPSG&quot;,&quot;3857&quot;]]</mapProjection-->
+      <alignToStandardGrid>false</alignToStandardGrid>
+      <standardGridOriginX>0.0</standardGridOriginX>
+      <standardGridOriginY>0.0</standardGridOriginY>
+      <nodataValueAtSea>true</nodataValueAtSea>
+      <saveDEM>false</saveDEM>
+      <saveLatLon>false</saveLatLon>
+      <saveIncidenceAngleFromEllipsoid>false</saveIncidenceAngleFromEllipsoid>
+      <saveLocalIncidenceAngle>false</saveLocalIncidenceAngle>
+      <saveProjectedLocalIncidenceAngle>false</saveProjectedLocalIncidenceAngle>
+      <saveSelectedSourceBand>true</saveSelectedSourceBand>
+      <outputComplex>false</outputComplex>
+      <applyRadiometricNormalization>false</applyRadiometricNormalization>
+      <saveSigmaNought>false</saveSigmaNought>
+      <saveGammaNought>false</saveGammaNought>
+      <saveBetaNought>false</saveBetaNought>
+      <incidenceAngleForSigma0>Use projected local incidence angle from DEM</incidenceAngleForSigma0>
+      <incidenceAngleForGamma0>Use projected local incidence angle from DEM</incidenceAngleForGamma0>
+      <auxFile>Latest Auxiliary File</auxFile>
+      <externalAuxFile/>
+    </parameters>
+  </node>
+  <node id="BandMaths">
+    <operator>BandMaths</operator>
+    <sources>
+      <sourceProduct refid="Terrain-Correction"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <targetBands>
+        <targetBand>
+          <name>Gamma0_VV_amp</name>
+          <type>float32</type>
+          <expression>sqrt(Gamma0_VV)</expression>
+          <description/>
+          <unit/>
+          <noDataValue>NaN</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>Gamma0_VH_amp</name>
+          <type>float32</type>
+          <expression>sqrt(Gamma0_VH)</expression>
+          <description/>
+          <unit/>
+          <noDataValue>NaN</noDataValue>
+        </targetBand>
+      </targetBands>
+      <variables/>
+    </parameters>
+  </node>
+  <node id="BandMaths(2)">
+    <operator>BandMaths</operator>
+    <sources>
+      <sourceProduct refid="BandMaths"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <targetBands>
+        <targetBand>
+          <name>mainVV</name>
+          <type>uint8</type>
+          <expression>min(255, round(319*Gamma0_VV_amp))</expression>
+          <description/>
+          <unit/>
+          <noDataValue>0</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>mainARI2</name>
+          <type>uint8</type>
+          <expression>min(255, round(159.5*(Gamma0_VV_amp + 2*Gamma0_VH_amp)))</expression>
+          <description/>
+          <unit/>
+          <noDataValue>0</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>mainVH2</name>
+          <type>uint8</type>
+          <expression>min(255, round(638*Gamma0_VH_amp))</expression>
+          <description/>
+          <unit/>
+          <noDataValue>0</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>sideVV</name>
+          <type>uint8</type>
+          <expression>if (Gamma0_VV_amp&gt;0 &amp;&amp; Gamma0_VV_amp&lt;0.2) then round(1275*Gamma0_VV_amp) else 255</expression>
+          <description/>
+          <unit/>
+          <noDataValue>255</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>sideARI2</name>
+          <type>uint8</type>
+          <expression>if (Gamma0_VV_amp&gt;0 &amp;&amp; Gamma0_VH_amp&gt;0) then min(255, round(637.5*(Gamma0_VV_amp + 2*Gamma0_VH_amp))) else 255</expression>
+          <description/>
+          <unit/>
+          <noDataValue>255</noDataValue>
+        </targetBand>
+        <targetBand>
+          <name>sideGEO2</name>
+          <type>uint8</type>
+          <expression>if (Gamma0_VV_amp&gt;0 &amp;&amp; Gamma0_VH_amp&gt;0) then min(255, round(1803*sqrt(Gamma0_VV_amp*Gamma0_VH_amp))) else 255</expression>
+          <description/>
+          <unit/>
+          <noDataValue>255</noDataValue>
+        </targetBand>
+      </targetBands>
+      <variables/>
+    </parameters>
+  </node>
+  <node id="Write">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="BandMaths(2)"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${write}</file>
+      <formatName>BEAM-DIMAP</formatName>
+    </parameters>
+  </node>
+  <applicationData id="Presentation">
+    <Description/>
+    <node id="Read">
+            <displayPosition x="37.0" y="134.0"/>
+    </node>
+    <node id="Apply-Orbit-File">
+      <displayPosition x="126.0" y="134.0"/>
+    </node>
+    <node id="Calibration">
+      <displayPosition x="250.0" y="134.0"/>
+    </node>
+    <node id="Speckle-Filter">
+      <displayPosition x="353.0" y="134.0"/>
+    </node>
+    <node id="Terrain-Flattening">
+      <displayPosition x="469.0" y="134.0"/>
+    </node>
+    <node id="Terrain-Correction">
+      <displayPosition x="608.0" y="134.0"/>
+    </node>
+    <node id="BandMaths">
+      <displayPosition x="749.0" y="134.0"/>
+    </node>
+    <node id="BandMaths(2)">
+      <displayPosition x="852.0" y="134.0"/>
+    </node>
+    <node id="Write">
+            <displayPosition x="966.0" y="134.0"/>
+    </node>
+  </applicationData>
+</graph>
