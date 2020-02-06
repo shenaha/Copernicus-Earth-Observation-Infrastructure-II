@@ -1,6 +1,6 @@
 Copernicus-Earth-Observation-Infrastructure-II
 --------------------------------------------------
-* *Automate water detection from Sentinel-1 satellite imagery using Telekom cloud archietecture.
+*Automate water detection from Sentinel-1 satellite imagery using Telekom cloud archietecture.
 
 * The aim of the project is to automate water detection from Sentinel-1 satellite imagery.
 * This repository contains scripts to get this process running. The python scripts are for searching, downloading and ingesting, unzipping and storing Sentinel-1 products on a virtual machine on the OTC. Moreover, the product ids are being sent to DMS queues in the OTC.  
